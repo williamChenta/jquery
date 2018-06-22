@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Estudo Jquery</title>
+
+    <style>
+        .form {
+            display: grid;
+            grid-template-columns: 250px auto;
+        }
+
+        .elem.lbl {
+            text-align: right;
+            margin-right: 5px;
+            padding: 5px;
+        }
+
+        .elem input {
+            width: 70%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- https://webmaniabr.com/docs/rest-api-correios/ -->
+
+    <div class="form">
+        <div class="elem lbl">
+            <label for="pesquisa">Digite o cep e clique em pesquisar: </label>
+        </div>
+        <div class="elem">
+            <input type="text" id="cep">
+            <button id="pesquisa">Pesquisar</button>
+        </div>
+        <div class="elem lbl">
+            <label for="rua">Rua:</label>
+        </div>
+        <div class="elem">
+            <input type="text" id="rua">
+        </div>
+        <div class="elem lbl">
+            <label for="bairro">Bairro:</label>
+        </div>
+        <div class="elem">
+            <input type="text" id="bairro">
+        </div>
+        <div class="elem lbl">
+            <label for="cidade">Cidade:</label>
+        </div>
+        <div class="elem">
+            <input type="text" id="cidade">
+        </div>
+        <div class="elem lbl">
+            <label for="uf">UF:</label>
+        </div>
+        <div class="elem">
+            <input type="text" id="uf">
+        </div>
+    </div>
+
+    
+
+
+
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="jquery.blockUI.js"></script>
+    <script>
+        var appKey = "/?app_key=uBSYaaxJc4zyynYqCezQsQNmE7xvUS7a"
+        var appSecret = "&app_secret=bZuNbTdPKKyOIEmWhxCaAQbEgEGz7csEyAh2pzgamBKqpbvP"
+
+        var correiosApi = function (cep) {
+            $.ajax({
+                url: `https://webmaniabr.com/api/1/cep/${cep}${appKey}${appSecret}`,
+                success: function (result) {
+                    $("#rua").val(result.endereco)
+                    $("#bairro").val(result.bairro)
+                    $("#cidade").val(result.cidade)
+                    $("#uf").val(result.uf)
+                },
+                error: function (erro) {
+                    console.log(`Deu erro: ${erro.code}`)
+                }
+            });
+        }
+
+        $("#pesquisa").click(function () {
+            correiosApi($("#cep").val())
+        })
+
+        $(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+    </script>
+</body>
+
+</html>
